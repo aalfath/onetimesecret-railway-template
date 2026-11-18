@@ -8,12 +8,15 @@ FROM onetimesecret/onetimesecret:v0.26.19@sha256:eb630051046042195a1dee73367f4f0
 # - Public sign-up is off: create the admin with `bin/ots customers create`.
 # - Railway's edge connects from 100.64.0.0/10 and forwards the client IP in
 #   X-Forwarded-For, so per-IP rate limits see real visitors.
+# - Railway's health checker also connects from 100.64.0.0/10; upstream only
+#   lets private addresses read /health, so that range is allowed too.
 ENV RACK_ENV=production \
     SSL=true \
     AUTHENTICATION_MODE=simple \
     AUTH_SIGNUP=false \
     TRUSTED_PROXY_ENABLED=true \
     TRUSTED_PROXY_CIDRS=100.64.0.0/10 \
+    HEALTH_TRUSTED_CIDR=100.64.0.0/10 \
     PUMA_WORKERS=2
 
 COPY --chown=appuser:appuser --chmod=755 start.sh /app/bin/railway-start.sh
