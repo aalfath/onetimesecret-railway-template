@@ -16,5 +16,7 @@ ENV RACK_ENV=production \
     TRUSTED_PROXY_CIDRS=100.64.0.0/10 \
     PUMA_WORKERS=2
 
+COPY --chown=appuser:appuser --chmod=755 start.sh /app/bin/railway-start.sh
+
 EXPOSE 3000
-CMD ["bin/entrypoint.sh"]
+CMD ["bin/railway-start.sh"]
